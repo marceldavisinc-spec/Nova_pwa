@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nova♾️ — PWA</title>
+
+  <!-- PWA basics -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#2b145a">
+
+  <!-- iOS PWA hints -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nova∞">
+
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="apple-touch-startup-image" href="splash/splash-1242x2688.png">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Nova♾️</h1>
+    <p class="tag">Sports Betting Assistant — PWA</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Live Odds Snapshot</h2>
+      <div id="odds">Loading…</div>
+      <button id="refresh">Refresh</button>
+      <p class="hint">This demo polls a placeholder endpoint every 30s. Replace it with your live odds API.</p>
+    </section>
+
+    <section class="card">
+      <h2>Quick Actions</h2>
+      <button onclick="openDeepLink('dk')">Open DraftKings</button>
+      <button onclick="openDeepLink('fd')">Open FanDuel</button>
+    </section>
+
+    <section class="card">
+      <h2>Install on iPhone</h2>
+      <ol>
+        <li>Open this page in <strong>Safari</strong>.</li>
+        <li>Tap <strong>Share</strong> → <strong>Add to Home Screen</strong>.</li>
+        <li>Launch from the home screen for full‑screen app feel.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <small>Nova♾️ PWA demo • Offline supported • <a href="offline.html">Offline page</a></small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

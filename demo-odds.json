@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-08-11T00:00:00Z",
+  "mlb": [
+    {
+      "game": "NYY @ BOS",
+      "moneyline": {
+        "NYY": -120,
+        "BOS": 105
+      },
+      "total": 9.0
+    }
+  ],
+  "wnba": [
+    {
+      "game": "LV @ SEA",
+      "spread": {
+        "LV": -3.5
+      },
+      "total": 168.5
+    }
+  ],
+  "nfl": [
+    {
+      "game": "KC @ BUF",
+      "moneyline": {
+        "KC": -115,
+        "BUF": -105
+      },
+      "total": 47.5
+    }
+  ]
+}
