@@ -1,58 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nova♾️ — PWA</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nova♾️ — Sports Betting Assistant</title>
 
   <!-- PWA basics -->
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#2b145a">
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="theme-color" content="#2b145a" />
 
-  <!-- iOS PWA hints -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Nova∞">
+  <!-- iOS install hints -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Nova∞" />
+  <link rel="apple-touch-icon" href="./icons/icon-180.png" />
 
-  <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <link rel="apple-touch-startup-image" href="splash/splash-1242x2688.png">
-
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Nova♾️</h1>
-    <p class="tag">Sports Betting Assistant — PWA</p>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">∞</div>
+      <div class="titles">
+        <h1>Nova</h1>
+        <span class="subtitle">Sports Betting Assistant</span>
+      </div>
+    </div>
+
+    <div class="status">
+      <span id="status" class="chip chip-muted">Loading…</span>
+      <span class="stamp">Last updated: <strong id="lastUpdated">--</strong></span>
+      <button id="refresh" class="btn">Refresh</button>
+    </div>
   </header>
 
-  <main>
+  <main class="container">
+    <!-- Odds -->
     <section class="card">
-      <h2>Live Odds Snapshot</h2>
-      <div id="odds">Loading…</div>
-      <button id="refresh">Refresh</button>
-      <p class="hint">This demo polls a placeholder endpoint every 30s. Replace it with your live odds API.</p>
+      <div class="card-head">
+        <h2>Live Odds Snapshot</h2>
+        <span class="badge">Auto refresh: 30s</span>
+      </div>
+      <pre id="odds" class="code"></pre>
+      <p class="muted">
+        Source auto‑switches:
+        <code>/odds</code> when running locally, <code>./demo-odds.json</code> on GitHub Pages.
+      </p>
     </section>
 
-    <section class="card">
-      <h2>Quick Actions</h2>
-      <button onclick="openDeepLink('dk')">Open DraftKings</button>
-      <button onclick="openDeepLink('fd')">Open FanDuel</button>
-    </section>
+    <!-- Quick actions -->
+    <section class="grid">
+      <div class="card">
+        <h3>Quick Actions</h3>
+        <div class="actions">
+          <button class="btn-outline" onclick="openDeepLink('dk')">Open DraftKings</button>
+          <button class="btn-outline" onclick="openDeepLink('fd')">Open FanDuel</button>
+        </div>
+        <p class="muted tiny">Tries the app first, then falls back to web.</p>
+      </div>
 
-    <section class="card">
-      <h2>Install on iPhone</h2>
-      <ol>
-        <li>Open this page in <strong>Safari</strong>.</li>
-        <li>Tap <strong>Share</strong> → <strong>Add to Home Screen</strong>.</li>
-        <li>Launch from the home screen for full‑screen app feel.</li>
-      </ol>
+      <div class="card">
+        <h3>Your Build Types</h3>
+        <ul class="list">
+          <li>🧱 Safe Anchor</li>
+          <li>🪤 Hedge</li>
+          <li>🧨 L.O.I.S.</li>
+          <li>🧠 Master</li>
+          <li>🌪 Chaos</li>
+        </ul>
+        <p class="muted tiny">We’ll wire these to actual generators next.</p>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <small>Nova♾️ PWA demo • Offline supported • <a href="offline.html">Offline page</a></small>
+  <footer class="footer">
+    <span>Nova♾️</span>
+    <span class="dot">•</span>
+    <a href="./offline.html">Offline page</a>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
