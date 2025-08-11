@@ -1,28 +1,23 @@
 // -----------------------------
-// Nova∞ PWA — app.js (FULL FILE)
+// Nova∞ PWA — app.js (AUTO TIMESTAMP)
 // -----------------------------
 
-// 1) Register the service worker (works on HTTPS like GitHub Pages)
+// 1) Register service worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js").catch(() => {
-      /* ignore SW errors during local testing */
-    });
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
   });
 }
 
-// 2) Decide where to fetch odds from
-// On GitHub Pages (github.io) we use the bundled demo JSON.
-// When running locally (your Flask server), we use /odds.
+// 2) Pick data source (hosted vs local)
 const isHosted = location.hostname.endsWith("github.io");
 const ODDS_URL = isHosted ? "./demo-odds.json" : "/odds";
 
-// 3) Tiny helpers
+// 3) Helpers
 const $ = (id) => document.getElementById(id);
-const setText = (id, text) => { const el = $(id); if (el) el.textContent = text; };
 const isoToLocal = (iso) => { try { return new Date(iso).toLocaleString(); } catch { return ""; } };
 
-// 4) Core fetch logic
+// 4) Fetch + display
 async function fetchOdds() {
   const out = $("odds");
   const stamp = $("lastUpdated");
@@ -36,34 +31,38 @@ async function fetchOdds() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
-    // Pretty print JSON
+    // If we're on GitHub Pages, stamp a fresh "served_at" so the UI shows the current time
+    if (isHosted) data.served_at = new Date().toISOString();
+
     out.textContent = JSON.stringify(data, null, 2);
 
-    // Last updated: prefer server time if present
-    const servedAt = data.served_at || data.timestamp || new Date().toISOString();
-    if (stamp) stamp.textContent = isoToLocal(servedAt);
+    const servedAt =
+      data.served_at ||
+      data.timestamp ||
+      new Date().toISOString();
 
+    if (stamp) stamp.textContent = isoToLocal(servedAt));
     if (statusChip) { statusChip.textContent = "Live"; statusChip.className = "chip chip-live"; }
   } catch (err) {
     if (statusChip) { statusChip.textContent = "Offline / Error"; statusChip.className = "chip chip-error"; }
     out.textContent =
 `Failed to fetch odds.
 
-• On GitHub Pages, data should come from ./demo-odds.json.
-• Locally, make sure your Flask server is running and app.js points to /odds.`;
+• On GitHub Pages, data loads from ./demo-odds.json (timestamp is auto-stamped).
+• Locally, /odds must come from your Flask server (python server.py).`;
   }
 }
 
-// 5) Wire up UI + polling
+// 5) UI wiring + polling
 window.addEventListener("DOMContentLoaded", () => {
   const refreshBtn = $("refresh");
   if (refreshBtn) refreshBtn.addEventListener("click", fetchOdds);
 
   fetchOdds();
-  setInterval(fetchOdds, 30000); // auto-refresh every 30s
+  setInterval(fetchOdds, 30000);
 });
 
-// 6) Deep links to books (simple: try app, then fall back to web)
+// 6) Deep links
 function openDeepLink(book) {
   if (book === "dk") {
     window.location.href = "draftkings://";
@@ -73,4 +72,4 @@ function openDeepLink(book) {
     setTimeout(() => window.open("https://sportsbook.fanduel.com", "_blank"), 400);
   }
 }
-window.openDeepLink = openDeepLink; // expose for buttons
+window.openDeepLink = openDeepLink;
