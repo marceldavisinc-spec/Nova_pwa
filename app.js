@@ -1,23 +1,26 @@
 // -----------------------------
-// Nova∞ PWA — app.js (AUTO TIMESTAMP)
+// Nova∞ PWA — app.js (FIXED)
 // -----------------------------
 
-// 1) Register service worker
+// 1) Register SW (works on HTTPS like GitHub Pages)
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./service-worker.js").catch(() => {});
   });
 }
 
-// 2) Pick data source (hosted vs local)
+// 2) Data source: GitHub Pages uses demo JSON; local uses /odds
 const isHosted = location.hostname.endsWith("github.io");
 const ODDS_URL = isHosted ? "./demo-odds.json" : "/odds";
 
 // 3) Helpers
 const $ = (id) => document.getElementById(id);
-const isoToLocal = (iso) => { try { return new Date(iso).toLocaleString(); } catch { return ""; } };
+const isoToLocal = (iso) => {
+  try { return new Date(iso).toLocaleString(); }
+  catch { return ""; }
+};
 
-// 4) Fetch + display
+// 4) Fetch + render
 async function fetchOdds() {
   const out = $("odds");
   const stamp = $("lastUpdated");
@@ -27,29 +30,29 @@ async function fetchOdds() {
   try {
     if (statusChip) { statusChip.textContent = "Fetching…"; statusChip.className = "chip chip-muted"; }
 
-    const res = await fetch(ODDS_URL, { cache: "no-store" });
+    // Bust cache on GitHub Pages to avoid stale demo-odds.json
+    const url = isHosted ? `${ODDS_URL}?t=${Date.now()}` : ODDS_URL;
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
     const data = await res.json();
 
-    // If we're on GitHub Pages, stamp a fresh "served_at" so the UI shows the current time
+    // On hosted, auto-stamp the current time so "Last updated" is always fresh
     if (isHosted) data.served_at = new Date().toISOString();
 
     out.textContent = JSON.stringify(data, null, 2);
 
-    const servedAt =
-      data.served_at ||
-      data.timestamp ||
-      new Date().toISOString();
+    const servedAt = data.served_at || data.timestamp || new Date().toISOString();
+    if (stamp) stamp.textContent = isoToLocal(servedAt);
 
-    if (stamp) stamp.textContent = isoToLocal(servedAt));
     if (statusChip) { statusChip.textContent = "Live"; statusChip.className = "chip chip-live"; }
   } catch (err) {
     if (statusChip) { statusChip.textContent = "Offline / Error"; statusChip.className = "chip chip-error"; }
     out.textContent =
 `Failed to fetch odds.
 
-• On GitHub Pages, data loads from ./demo-odds.json (timestamp is auto-stamped).
-• Locally, /odds must come from your Flask server (python server.py).`;
+• On GitHub Pages, data loads from ./demo-odds.json (timestamp auto-stamped).
+• Locally, /odds must be served by your Flask server (python server.py).`;
   }
 }
 
@@ -57,7 +60,6 @@ async function fetchOdds() {
 window.addEventListener("DOMContentLoaded", () => {
   const refreshBtn = $("refresh");
   if (refreshBtn) refreshBtn.addEventListener("click", fetchOdds);
-
   fetchOdds();
   setInterval(fetchOdds, 30000);
 });
